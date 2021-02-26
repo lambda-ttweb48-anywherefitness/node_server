@@ -1,4 +1,5 @@
-require('dotenv').config();
+var dotenv = require('dotenv');
+dotenv.config({ path: '.env' });
 /*
   PORT=5000
   NODE_ENV=development
