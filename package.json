@@ -5,14 +5,17 @@
   "license": "MIT",
   "repository": "github:christophersutton/node-starter",
   "scripts": {
-    "start": "node server.js",
-    "watch:dev": "nodemon",
-    "lint": "npx eslint .",
-    "lint:fix": "npx eslint --fix .",
-    "format": "npx prettier --write \"**/*.+(js|jsx|json|yml|yaml|css|md)\"",
-    "knex": "npx knex",
-    "tests": "DB_ENV=testing jest --watchAll --verbose --runInBand",
-    "coverage": "CI=true npx jest --coverage --detectOpenHandles --forceExit"
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback",
+    "seed": "knex seed:run",
+    "hup": "heroku run knex migrate:latest -a YOUR_HEROKU_APP_NAME_HERE",
+    "hdown": "heroku run knex migrate:rollback -a YOUR_HEROKU_APP_NAME_HERE",
+    "hdb": "heroku pg:psql -a YOUR_HEROKU_APP_NAME_HERE",
+    "hseed": "heroku run knex seed:run -a YOUR_HEROKU_APP_NAME_HERE",
+    "test": "cross-env NODE_ENV=testing jest --watchAll --verbose --runInBand",
+    "deploy": "git push heroku main"
   },
   "lint-staged": {
     "api/**/*.js": [
