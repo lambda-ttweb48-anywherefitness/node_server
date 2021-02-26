@@ -1,5 +1,9 @@
+// lab starter version
 var dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
+
+// buildweek starter version
+// require('dotenv').config();
 /*
   PORT=5000
   NODE_ENV=development
