@@ -1,9 +1,9 @@
 {
-  "name": "node-starter",
+  "name": "anywherefitness-server",
   "version": "1.0.0",
   "private": false,
   "license": "MIT",
-  "repository": "github:christophersutton/node-starter",
+  "repository": "github:lambda-ttweb48-anywherefitness/server",
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
