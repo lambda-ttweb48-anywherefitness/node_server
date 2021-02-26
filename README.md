@@ -1,14 +1,49 @@
-# Node API Scaffolding
+# Anywhere Fitness Backend
 
-Basic starter app based on Lambda Labs api scaffolding. 
+## API Endpoints
+
+### Auth
+POST to /register to create a new account
+- email
+- password
+- name 
+- instructor (boolean)
+
+POST to /login to login
+- email
+- password
+
+### Classes
+All POST, PUT, DELETE actions for classes will require an auth header token for a logged in instructor.
+GET classes will be an unprotected route.
+Route is /api/classes
+
+Required fields for creation:
+- name
+- type
+- start
+-- Datetime object
+- duration
+-- integer (minutes)
+- intensity
+- location
+- max_size
+-- integer (number of slots in class)
+
+
+### Reservations
+All POST & DELETE actions for reservations will require an auth header token for a logged in user.
+GET classes TBD.
+Route is /api/reserverations
+
+POST to /api/reservations to create a new student reservation. 
+- class_id
+
+PUTS
 
 ## Getting Started
 
 ### Enviornment Variables
-
-- `PORT` - API port (optional, but helpful with FE running as well)
-- `DATABASE_URL` - connection string for postgres database
-- `JWT_SECRET` - signing secret for json web token
 
 See .env.sample for example values
 
