@@ -1,5 +1,5 @@
 var dotenv = require('dotenv');
-dotenv.config({ path: '../.env' });
+dotenv.config({ path: '.env' });
 
 module.exports = {
   development: {
@@ -24,7 +24,6 @@ module.exports = {
     client: 'pg',
     connection: {
       connectionString: process.env.DATABASE_URL,
-      ssl: true,
     },
     migrations: { directory: './data/migrations' },
     seeds: { directory: './data/seeds' },

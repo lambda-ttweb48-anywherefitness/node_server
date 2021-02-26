@@ -5,6 +5,18 @@ const schema = {
     friendlyName: 'Profile',
     requiredFields: ['email', 'name', 'password'],
   },
+  classes: {
+    friendlyName: 'Class',
+    requiredFields: [
+      'type',
+      'name',
+      'start',
+      'duration',
+      'intensity',
+      'location',
+      'max_size',
+    ],
+  },
 };
 
 const findAll = async (table) => {

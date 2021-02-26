@@ -12,13 +12,13 @@ exports.up = (knex) => {
       table.increments('id').primary();
       table.string('name').notNullable();
       table.string('type').notNullable();
-      table.string('start').notNullable();
-      table.string('duration').notNullable();
+      table.datetime('start').notNullable();
+      table.integer('duration').notNullable();
       table.string('intensity').notNullable();
       table.string('location').notNullable();
-      table.string('max_size').notNullable();
+      table.integer('max_size').notNullable();
       table
-        .boolean('instructor_id')
+        .string('instructor_id')
         .unsigned()
         .notNullable()
         .references('id')
@@ -30,7 +30,7 @@ exports.up = (knex) => {
     .createTable('reservations', function (table) {
       table.increments('id').primary();
       table
-        .string('class_id')
+        .integer('class_id')
         .unsigned()
         .notNullable()
         .references('id')

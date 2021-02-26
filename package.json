@@ -10,7 +10,7 @@
     "lint": "npx eslint .",
     "lint:fix": "npx eslint --fix .",
     "format": "npx prettier --write \"**/*.+(js|jsx|json|yml|yaml|css|md)\"",
-    "knex": "npx knex --knexfile config/knexfile.js",
+    "knex": "npx knex",
     "tests": "DB_ENV=testing jest --watchAll --verbose --runInBand",
     "coverage": "CI=true npx jest --coverage --detectOpenHandles --forceExit"
   },

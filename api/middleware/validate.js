@@ -2,6 +2,7 @@ const DB = require('../../data/dbInterface');
 
 const validateResource = async (req, res, next) => {
   const { table, id } = req.params;
+  console.log(table);
   if (!DB.schema[table]) {
     res.status(404).json({ error: `Resource ${table} does not exist` });
   } else if (id === undefined) {
