@@ -5,8 +5,8 @@
   "license": "MIT",
   "repository": "github:lambda-ttweb48-anywherefitness/server",
   "scripts": {
-    "start": "node index.js",
-    "server": "nodemon index.js",
+    "start": "node server.js",
+    "server": "nodemon server.js",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
