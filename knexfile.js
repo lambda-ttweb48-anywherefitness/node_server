@@ -1,6 +1,8 @@
 var dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
 
+const PROD_DB = process.env.DATABASE_URL + '?sslmode=require'
+
 module.exports = {
   development: {
     client: 'pg',
@@ -23,7 +25,7 @@ module.exports = {
   production: {
     client: 'pg',
     connection: {
-      connectionString: process.env.DATABASE_URL,
+      connectionString: PROD_DB,
       ssl: { rejectUnauthorized: false },
     },
     migrations: { directory: './data/migrations' },
