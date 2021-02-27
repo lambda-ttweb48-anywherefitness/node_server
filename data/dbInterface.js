@@ -17,6 +17,10 @@ const schema = {
       'max_size',
     ],
   },
+  reservations: {
+    friendlyName: 'Reservation',
+    requiredFields: ['class_id'],
+  },
 };
 
 const findAll = async (table) => {

@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.post('/', validatePayload, async (req, res) => {
   const profile = req.body;
+  console.log(profile);
   DB.findBy('profiles', { email: profile.email })
     .then((rows) => {
       // we will create a new profile only if no rows returned
@@ -17,7 +18,7 @@ router.post('/', validatePayload, async (req, res) => {
 
         DB.create('profiles', { ...profile, id: uuid, password: hash })
           .then((profile) => {
-            const token = Auth.makeToken(profile);
+            const token = Auth.makeToken(profile[0]);
             //eslint-disable-next-line
             const { password, ...profResp } = profile[0];
             res.status(201).json({ profile: profResp, token: token });

@@ -2,8 +2,8 @@ const DB = require('../../data/dbInterface');
 
 const validateResource = async (req, res, next) => {
   const { table, id } = req.params;
-  console.log(table);
-  if (!DB.schema[table]) {
+
+  if (!DB.schema[table] || table === 'profiles') {
     res.status(404).json({ error: `Resource ${table} does not exist` });
   } else if (id === undefined) {
     next();
@@ -28,13 +28,23 @@ const validateResource = async (req, res, next) => {
 
 const validatePayload = async (req, res, next) => {
   const table = req.params.table ? req.params.table : 'profiles';
+  const payload = req.body;
 
   DB.schema[table].requiredFields.forEach((field) => {
     if (!req.body[field]) {
       res.status(400).json({ message: 'Please provide required info' });
     }
   });
-  next();
+
+  if (table === 'classes') {
+    res.locals.payload = { ...payload, instructor_id: res.locals.user.id };
+    next();
+  } else if (table === 'reservations') {
+    res.locals.payload = { ...payload, client_id: res.locals.user.id };
+    next();
+  } else {
+    next();
+  }
 };
 
 module.exports = {
