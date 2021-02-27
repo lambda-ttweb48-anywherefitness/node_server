@@ -23,7 +23,7 @@ const decodeToken = (token) => {
   return jwt.decode(token, jwtSecret);
 };
 
-const authRequired = async (req, res, next) => {
+const authCreate = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) throw new Error('Missing Authorization');
@@ -39,7 +39,27 @@ const authRequired = async (req, res, next) => {
   }
 };
 
+const authEdit = async (req, res, next) => {
+  const { table, id } = req.params;
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) throw new Error('Missing Authorization');
+    const user = decodeToken(authHeader);
+    res.locals.user = await db.findById('profiles', user.subject);
+    if (!res.locals.user) throw new Error('Incorrect Authorization');
+
+    const resource = await db.findById(table, id);
+    if (resource.owner_id != res.locals.user.id)
+      throw new Error('Incorrect Authorization');
+    next();
+  } catch (err) {
+    next(createError(401, err.message));
+  }
+};
+
+
 module.exports = {
-  authRequired,
+  authCreate,
   makeToken,
+  authEdit,
 };

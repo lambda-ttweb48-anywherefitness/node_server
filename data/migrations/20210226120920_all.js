@@ -18,7 +18,7 @@ exports.up = (knex) => {
       table.string('location').notNullable();
       table.integer('max_size').notNullable();
       table
-        .string('instructor_id')
+        .string('owner_id')
         .unsigned()
         .notNullable()
         .references('id')
@@ -38,7 +38,7 @@ exports.up = (knex) => {
         .onUpdate('CASCADE')
         .onDelete('CASCADE');
       table
-        .string('client_id')
+        .string('owner_id')
         .unsigned()
         .notNullable()
         .references('id')

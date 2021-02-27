@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var DB = require('../data/dbInterface');
-var { authRequired } = require('./middleware/auth');
+var { authCreate, authEdit } = require('./middleware/auth');
 var { validateResource, validatePayload } = require('./middleware/validate');
 
 router.get('/:table/', validateResource, function (req, res) {
@@ -20,7 +20,7 @@ router.get('/:table/:id', validateResource, function (req, res) {
 
 router.post(
   '/:table/',
-  authRequired,
+  authCreate,
   validateResource,
   validatePayload,
   async (req, res) => {
@@ -36,10 +36,9 @@ router.post(
   }
 );
 
-router.put('/:table/:id', validateResource, (req, res) => {
+router.put('/:table/:id', authEdit, validateResource, (req, res) => {
   const { table, id } = req.params;
-  const update = req.body;
-  DB.update(table, id, update)
+  DB.update(table, id, res.locals.payload)
     .then((updated) => {
       res.status(200).json({
         message: `${DB.schema[table].friendlyName} updated`,
@@ -54,7 +53,7 @@ router.put('/:table/:id', validateResource, (req, res) => {
     });
 });
 
-router.delete('/:table/:id', validateResource, (req, res) => {
+router.delete('/:table/:id', authEdit, validateResource, (req, res) => {
   const { table, id } = req.params;
   DB.remove(table, id)
     .then(() => {

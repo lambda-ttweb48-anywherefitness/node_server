@@ -36,15 +36,10 @@ const validatePayload = async (req, res, next) => {
     }
   });
 
-  if (table === 'classes') {
-    res.locals.payload = { ...payload, instructor_id: res.locals.user.id };
-    next();
-  } else if (table === 'reservations') {
-    res.locals.payload = { ...payload, client_id: res.locals.user.id };
-    next();
-  } else {
-    next();
-  }
+  res.locals.payload = res.locals.user
+    ? { ...payload, owner_id: res.locals.user.id }
+    : payload;
+  next();
 };
 
 module.exports = {
