@@ -24,15 +24,45 @@ const schema = {
 };
 
 const findAll = async (table) => {
-  return await db(table);
+  if (table === 'classes') {
+    return await db('classes')
+      .join('reservations', 'classes.id', '=', 'reservations.class_id')
+      .select(
+        db.raw(
+          'classes.*, (classes.max_size - count(reservations.id)::int) as spots_remaining'
+        )
+      )
+      .groupBy('classes.id');
+  } else return await db(table);
 };
 
-const findBy = (table, filter) => {
-  return db(table).where(filter);
+const findBy = async (table, filter) => {
+  if (table === 'classes') {
+    return await db('classes')
+      .join('reservations', 'classes.id', '=', 'reservations.class_id')
+      .select(
+        db.raw(
+          'classes.*, (classes.max_size - count(reservations.id)::int) as spots_remaining'
+        )
+      )
+      .groupBy('classes.id')
+      .where(filter);
+  } else return db(table).where(filter);
 };
 
 const findById = async (table, id) => {
-  return db(table).where({ id }).first().select('*');
+  if (table === 'classes') {
+    return await db('classes')
+      .join('reservations', 'classes.id', '=', 'reservations.class_id')
+      .select(
+        db.raw(
+          'classes.*, (classes.max_size - count(reservations.id)::int) as spots_remaining'
+        )
+      )
+      .groupBy('classes.id')
+      .where({ 'classes.id': id })
+      .first();
+  } else return db(table).where({ id }).first().select('*');
 };
 
 const create = async (table, newObj) => {
@@ -48,9 +78,28 @@ const remove = async (table, id) => {
 };
 
 const findAllClasses = async (classes) => {
-  return await db(classes);
+  return await db(classes)
+    .join('reservations', 'classes.id', '=', 'reservations.class_id')
+    .select(
+      db.raw(
+        'classes.*, (classes.max_size - count(reservations.id)::int) as spots_remaining'
+      )
+    )
+    .groupBy('classes.id');
 };
 
+const findClassById = async (classes, id) => {
+  return await db(classes)
+    .join('reservations', 'classes.id', '=', 'reservations.class_id')
+    .select(
+      db.raw(
+        'classes.*, (classes.max_size - count(reservations.id)::int) as spots_remaining'
+      )
+    )
+    .where({ id })
+    .first()
+    .groupBy('classes.id');
+};
 
 module.exports = {
   schema,
@@ -60,5 +109,6 @@ module.exports = {
   create,
   update,
   remove,
+  findClassById,
   findAllClasses,
 };

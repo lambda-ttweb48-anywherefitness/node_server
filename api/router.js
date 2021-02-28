@@ -5,18 +5,7 @@ var { authCreate, authEdit } = require('./middleware/auth');
 var { validateResource, validatePayload } = require('./middleware/validate');
 
 router.get('/:table/', validateResource, function (req, res) {
-  const table = req.params.table;
-  var method;
-
-  switch (table) {
-    case 'classes':
-      method = 'findAllClasses';
-      break;
-    default:
-      method = 'findAll';
-  }
-
-  DB[method](table)
+  DB.findAll(req.params.table)
     .then((objs) => {
       res.status(200).json(objs);
     })
