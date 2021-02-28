@@ -47,6 +47,11 @@ const remove = async (table, id) => {
   return await db(table).where({ id }).del();
 };
 
+const findAllClasses = async (classes) => {
+  return await db(classes);
+};
+
+
 module.exports = {
   schema,
   findAll,
@@ -55,4 +60,5 @@ module.exports = {
   create,
   update,
   remove,
+  findAllClasses,
 };
