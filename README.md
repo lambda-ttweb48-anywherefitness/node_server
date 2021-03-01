@@ -12,8 +12,8 @@ Path|Method|Requirements|Auth
 ### Classes
 Path|Method|Requirements|Auth
 ---|-----|-------------|-----
-/api/classes|POST| name, type, start (Datetime), duration (int minutes), intensity, location, max_size (int)|valid JWT token w intstructor = true 
 /api/classes| GET | optional query strings to filter search | none
+/api/classes|POST| name, type, start (Datetime), duration (int minutes), intensity, location, max_size (int)|valid JWT token w intstructor = true 
 /api/classes/:id| PUT | id, any edits | Auth token profile id must match class owner id
 /api/classes/:id| DELETE | none | Auth token profile id must match class owner id
 /dash/classes|GET|none|valid auth token, will return all classes taught by token profile
@@ -21,11 +21,11 @@ Path|Method|Requirements|Auth
 ### Reservations
 Path|Method|Requirements|Auth
 ---|-----|-------------|-----
-/api/reservations|POST| class_id |valid JWT token 
 /api/reservations| GET | none | none
-/api/classes:id| PUT | id, any edits | Auth token profile id must match re owner id
+/api/reservations|POST| class_id |valid JWT token 
+/api/reservations:id| PUT | id, any edits | Auth token profile id must match reservation owner id
 /api/reservations/:id| DELETE | none | Auth token profile id must match reservation owner id
-/dash/reservations|GET|none|Auth token (will return all reservations for the token profile)
+/dash/reservations|GET|none|Auth token (will return all reservations for the token profile id)
 
 ## Getting Started
 

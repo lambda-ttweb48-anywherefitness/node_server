@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
-const db = require('../../data/dbInterface');
+const DB = require('../../data/dbInterface');
 require('dotenv').config();
 
 const makeToken = (profile) => {
   const payload = {
-    subject: profile.id,
+    id: profile.id,
     email: profile.email,
-    operator: profile.operator,
+    instructor: profile.instructor,
     name: profile.name,
   };
   const config = {
@@ -24,44 +24,39 @@ const decodeToken = (token) => {
   return jwt.decode(token, jwtSecret);
 };
 
-const authCreate = async (req, res, next) => {
+const auth = async (req, res, next) => {
   try {
+    // make sure they sent a token
     const authHeader = req.headers.authorization;
-    if (!authHeader) throw new Error('Missing Authorization');
-    const user = decodeToken(authHeader);
-    res.locals.user = await db.findById('profiles', user.subject);
-    if (!res.locals.user) throw new Error('Incorrect Authorization');
+    if (!authHeader) throw new Error('Missing Authorization Token');
 
+    // make sure that the profile from token still exists
+    res.locals.user = decodeToken(authHeader);
+    const verify = await DB.findById('profiles', res.locals.user.id);
+    if (verify.id != res.locals.user.id)
+      throw new Error('User token does not exist');
+
+    // only instructors can create new classes
     if (req.params.table === 'classes' && res.locals.user.operator === false)
-      throw new Error('Incorrect Authorization');
-    next();
+      throw new Error('User must be an instructor');
+
+    // ensure that only an object's owner can edit or delete it
+    if (!req.params.id) {
+      next();
+    } else {
+      const { table, id } = req.params;
+      const resource = await DB.findById(table, id);
+      if (resource.owner_id != res.locals.user.id)
+        throw new Error('User must be resource owner');
+      next();
+    }
   } catch (err) {
-    next(createError(401, err.message));
+    next(createError(401, err));
   }
 };
-
-const authEdit = async (req, res, next) => {
-  const { table, id } = req.params;
-  try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) throw new Error('Missing Authorization');
-    const user = decodeToken(authHeader);
-    res.locals.user = await db.findById('profiles', user.subject);
-    if (!res.locals.user) throw new Error('Incorrect Authorization');
-
-    const resource = await db.findById(table, id);
-    if (resource.owner_id != res.locals.user.id)
-      throw new Error('Incorrect Authorization');
-    next();
-  } catch (err) {
-    next(createError(401, err.message));
-  }
-};
-
 
 module.exports = {
-  authCreate,
+  auth,
   makeToken,
   decodeToken,
-  authEdit,
 };
