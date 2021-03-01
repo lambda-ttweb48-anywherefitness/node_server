@@ -21,10 +21,10 @@ Path|Method|Requirements|Auth
 ### Class Cards
 Path|Method|Requirements|Auth
 ---|-----|-------------|-----
-/api/class_cards| GET | none | none
-/api/class_cards|POST| owner_id (client), type, total_classes, price_paid | valid JWT token w instructor = true
-/api/class_cards/:id| PUT | id, any edits | Auth token profile id must match reservation owner id?
-/api/class_cards/:id| DELETE | none | Auth token profile id must match reservation owner id
+/api/class_passes| GET | none | none
+/api/class_passes|POST| owner_id (client), type, total_classes, price_paid | valid JWT token w instructor = true
+/api/class_passes/:id| PUT | id, any edits | Auth token profile id must match reservation owner id?
+/api/class_passes/:id| DELETE | none | Auth token profile id must match reservation owner id
 /dash/passes|GET|none|Auth token (will return all class passes for the token profile id)
 
 ### Reservations
