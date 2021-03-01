@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.post('/', validatePayload, async (req, res) => {
   const profile = req.body;
-  console.log(profile);
   DB.findBy('profiles', { email: profile.email })
     .then((rows) => {
       // we will create a new profile only if no rows returned
@@ -26,7 +25,7 @@ router.post('/', validatePayload, async (req, res) => {
           .catch((error) => {
             res.status(500).json({
               error: 'Could not add new user',
-              details: error.message,
+              message: error.message,
             });
           });
       } else {
