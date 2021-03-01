@@ -84,6 +84,7 @@ exports.down = (knex) => {
   return knex.schema
     .dropTableIfExists('reservations')
     .dropTableIfExists('class_passes')
+    .dropTableIfExists('class_cards')
     .dropTableIfExists('classes')
     .dropTableIfExists('profiles');
 };
