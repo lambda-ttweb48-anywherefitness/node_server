@@ -24,23 +24,43 @@ const decodeToken = (token) => {
   return jwt.decode(token, jwtSecret);
 };
 
-const auth = async (req, res, next) => {
+const reqHasToken = async (req, res, next) => {
   try {
-    // make sure they sent a token
-    const authHeader = req.headers.authorization;
-    if (!authHeader) throw new Error('Missing Authorization Token');
+    if (!req.headers.authorization)
+      throw new Error('Missing Authorization Token');
+    next();
+  } catch (err) {
+    next(createError(401, err.message));
+  }
+};
 
-    // make sure that the profile from token still exists
-    res.locals.user = decodeToken(authHeader);
+const tokenHasValidProfile = async (req, res, next) => {
+  try {
+    res.locals.user = decodeToken(req.headers.authorization);
     const verify = await DB.findById('profiles', res.locals.user.id);
     if (verify[0].id != res.locals.user.id)
-      throw new Error('User token does not exist');
+      throw new Error('User profile does not exist');
+    next();
+  } catch (err) {
+    next(createError(401, err.message));
+  }
+};
 
-    // only instructors can create new classes
-    if (req.params.table === 'classes' && res.locals.user.operator === false)
+const profileCanCreateObject = async (req, res, next) => {
+  try {
+    if (
+      ['classes', 'class_cards'].includes(req.params.table) &&
+      res.locals.user.instructor === false
+    )
       throw new Error('User must be an instructor');
+    next();
+  } catch (err) {
+    next(createError(401, err.message));
+  }
+};
 
-    // ensure that only an object's owner can edit or delete it
+const profileCanEditObject = async (req, res, next) => {
+  try {
     if (!req.params.id) {
       next();
     } else {
@@ -54,6 +74,13 @@ const auth = async (req, res, next) => {
     next(createError(401, err.message));
   }
 };
+
+const auth = [
+  reqHasToken,
+  tokenHasValidProfile,
+  profileCanCreateObject,
+  profileCanEditObject,
+];
 
 module.exports = {
   auth,
