@@ -4,9 +4,9 @@ var DB = require('../../data/dbInterface');
 var { auth } = require('../middleware/auth');
 
 router.get('/reservations', auth, function (req, res) {
-  DB.findClassesBy({ ['reservations.owner_id']: res.locals.user.id })
-    .then((classes) => {
-      res.status(200).json(classes);
+  DB.findReservationsById(res.locals.user.id)
+    .then((results) => {
+      res.status(200).json(results.rows);
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });
