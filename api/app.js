@@ -30,6 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 const mainRouter = require('./router');
 const loginRouter = require('./auth/loginRouter');
 const registerRouter = require('./auth/registerRouter');
+const dashRouter = require('./dashboard/dashboardRouter');
 
 // application routes
 app.get('/', function (req, res) {
@@ -38,6 +39,7 @@ app.get('/', function (req, res) {
 app.use('/api', mainRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
+app.use('/dash', dashRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

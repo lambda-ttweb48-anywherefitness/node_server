@@ -26,7 +26,7 @@ const schema = {
 const findAll = async (table) => {
   if (table === 'classes') {
     return await db('classes')
-      .join('reservations', 'classes.id', '=', 'reservations.class_id')
+      .leftJoin('reservations', { 'classes.id': 'reservations.class_id' })
       .select(
         db.raw(
           'classes.*, (classes.max_size - count(reservations.id)::int) as spots_remaining'
@@ -39,7 +39,7 @@ const findAll = async (table) => {
 const findBy = async (table, filter) => {
   if (table === 'classes') {
     return await db('classes')
-      .join('reservations', 'classes.id', '=', 'reservations.class_id')
+      .leftJoin('reservations', { 'classes.id': 'reservations.class_id' })
       .select(
         db.raw(
           'classes.*, (classes.max_size - count(reservations.id)::int) as spots_remaining'
@@ -53,14 +53,14 @@ const findBy = async (table, filter) => {
 const findById = async (table, id) => {
   if (table === 'classes') {
     return await db('classes')
-      .join('reservations', 'classes.id', '=', 'reservations.class_id')
+      .leftJoin('reservations', { 'classes.id': 'reservations.class_id' })
       .select(
         db.raw(
           'classes.*, (classes.max_size - count(reservations.id)::int) as spots_remaining'
         )
       )
       .groupBy('classes.id')
-      .where({ 'classes.id': id })
+      .where({ 'classes.id': `${id}` })
       .first();
   } else return db(table).where({ id }).first().select('*');
 };
@@ -77,28 +77,16 @@ const remove = async (table, id) => {
   return await db(table).where({ id }).del();
 };
 
-const findAllClasses = async (classes) => {
-  return await db(classes)
-    .join('reservations', 'classes.id', '=', 'reservations.class_id')
+const findClassesByParticipant = async (id) => {
+  return await db('classes')
+    .leftJoin('reservations', { 'classes.id': 'reservations.class_id' })
     .select(
       db.raw(
         'classes.*, (classes.max_size - count(reservations.id)::int) as spots_remaining'
       )
     )
-    .groupBy('classes.id');
-};
-
-const findClassById = async (classes, id) => {
-  return await db(classes)
-    .join('reservations', 'classes.id', '=', 'reservations.class_id')
-    .select(
-      db.raw(
-        'classes.*, (classes.max_size - count(reservations.id)::int) as spots_remaining'
-      )
-    )
-    .where({ id })
-    .first()
-    .groupBy('classes.id');
+    .groupBy('classes.id')
+    .where({ 'reservations.owner_id': id });
 };
 
 module.exports = {
@@ -109,6 +97,5 @@ module.exports = {
   create,
   update,
   remove,
-  findClassById,
-  findAllClasses,
+  findClassesByParticipant,
 };

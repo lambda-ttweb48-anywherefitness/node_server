@@ -8,6 +8,7 @@ const makeToken = (profile) => {
     subject: profile.id,
     email: profile.email,
     operator: profile.operator,
+    name: profile.name,
   };
   const config = {
     jwtSecret: process.env.JWT_SECRET,
@@ -61,5 +62,6 @@ const authEdit = async (req, res, next) => {
 module.exports = {
   authCreate,
   makeToken,
+  decodeToken,
   authEdit,
 };
