@@ -3,43 +3,29 @@
 ## API Endpoints
 
 ### Auth
-POST to /register to create a new account
-- email
-- password
-- name 
-- instructor (boolean)
+Path|Method|Requirements|Auth
+---|-----|-------------|---
+/register|POST|email, password, name, instructor(boolean)|none
+/login|POST|email, password|none
 
-POST to /login to login
-- email
-- password
 
 ### Classes
-All POST, PUT, DELETE actions for classes will require an auth header token for a logged in instructor.
-GET classes will be an unprotected route.
-Route is /api/classes
-
-Required fields for creation:
-- name
-- type
-- start
--- Datetime object
-- duration
--- integer (minutes)
-- intensity
-- location
-- max_size
--- integer (number of slots in class)
-
+Path|Method|Requirements|Auth
+---|-----|-------------|-----
+/api/classes|POST| name, type, start (Datetime), duration (int minutes), intensity, location, max_size (int)|valid JWT token w intstructor = true 
+/api/classes| GET | optional query strings to filter search | none
+/api/classes/:id| PUT | id, any edits | Auth token profile id must match class owner id
+/api/classes/:id| DELETE | none | Auth token profile id must match class owner id
+/dash/classes|GET|none|valid auth token, will return all classes taught by token profile
 
 ### Reservations
-All POST & DELETE actions for reservations will require an auth header token for a logged in user.
-GET classes TBD.
-Route is /api/reserverations
-
-POST to /api/reservations to create a new student reservation. 
-- class_id
-
-PUTS
+Path|Method|Requirements|Auth
+---|-----|-------------|-----
+/api/reservations|POST| class_id |valid JWT token 
+/api/reservations| GET | none | none
+/api/classes:id| PUT | id, any edits | Auth token profile id must match re owner id
+/api/reservations/:id| DELETE | none | Auth token profile id must match reservation owner id
+/dash/reservations|GET|none|Auth token (will return all reservations for the token profile)
 
 ## Getting Started
 
