@@ -1,6 +1,7 @@
 # Anywhere Fitness Backend
 
 ## API Endpoints
+Server is deployed at: https://anywherefitness-server.herokuapp.com/
 
 ### Auth
 Path|Method|Requirements|Auth
