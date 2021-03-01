@@ -37,7 +37,7 @@ const validatePayload = async (req, res, next) => {
     }
   });
 
-  if (table === 'class_cards') {
+  if (table === 'class_passes') {
     res.locals.payload = res.locals.user
       ? { ...payload, issued_by: res.locals.user.id }
       : payload;

@@ -24,7 +24,7 @@ router.get('/classes', auth, function (req, res) {
 });
 
 router.get('/passes', auth, function (req, res) {
-  DB.findPassesBy({ ['class_cards.owner_id']: res.locals.user.id })
+  DB.findPassesBy({ ['class_passes.owner_id']: res.locals.user.id })
     .then((objs) => {
       res.status(200).json(objs);
     })

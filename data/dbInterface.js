@@ -21,7 +21,7 @@ const schema = {
     friendlyName: 'Reservation',
     requiredFields: ['class_id', 'pass_id'],
   },
-  class_cards: {
+  class_passes: {
     friendlyName: 'Class Pass',
     requiredFields: ['owner_id', 'type', 'total_classes', 'price_paid'],
   },
@@ -76,15 +76,15 @@ const findClassesBy = async (filter) => {
 };
 
 const findPassesBy = async (filter) => {
-  return await db('class_cards')
-    .leftJoin('reservations', { 'class_cards.id': 'reservations.pass_id' })
+  return await db('class_passes')
+    .leftJoin('reservations', { 'class_passes.id': 'reservations.pass_id' })
     .select(
       db.raw(
-        `class_cards.*, 
+        `class_passes.*, 
         (count(reservations.id)::int) as classes_used`
       )
     )
-    .groupBy('class_cards.id')
+    .groupBy('class_passes.id')
     .where(filter);
 };
 

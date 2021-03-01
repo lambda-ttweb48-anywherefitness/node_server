@@ -49,7 +49,7 @@ const tokenHasValidProfile = async (req, res, next) => {
 const profileCanCreateObject = async (req, res, next) => {
   try {
     if (
-      ['classes', 'class_cards'].includes(req.params.table) &&
+      ['classes', 'class_passes'].includes(req.params.table) &&
       res.locals.user.instructor === false
     )
       throw new Error('User must be an instructor');

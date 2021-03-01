@@ -27,7 +27,7 @@ exports.up = (knex) => {
         .onDelete('CASCADE');
       table.timestamps(true, true);
     })
-    .createTable('class_cards', function (table) {
+    .createTable('class_passes', function (table) {
       table.increments('id').primary();
       table
         .string('owner_id')
@@ -73,7 +73,7 @@ exports.up = (knex) => {
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('class_cards')
+        .inTable('class_passes')
         .onUpdate('CASCADE')
         .onDelete('CASCADE');
       table.timestamps(true, true);
@@ -83,7 +83,7 @@ exports.up = (knex) => {
 exports.down = (knex) => {
   return knex.schema
     .dropTableIfExists('reservations')
-    .dropTableIfExists('class_cards')
+    .dropTableIfExists('class_passes')
     .dropTableIfExists('classes')
     .dropTableIfExists('profiles');
 };
