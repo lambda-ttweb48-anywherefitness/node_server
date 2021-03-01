@@ -34,7 +34,7 @@ Path|Method|Requirements|Auth
 /api/client_passes| GET | none | none
 /api/client_passes/:id| GET | none | none
 /api/client_passes|POST| class_pass_id | valid JWT token 
-/api/client_passes/:id| DELETE | none | Auth token profile id must match reservation owner id
+/api/client_passes/:id| DELETE | none | Auth token profile id must match client pass owner id
 /dash/client_passes|GET|none|Auth token (will return all client passes for the token profile id)
 
 ### Reservations
