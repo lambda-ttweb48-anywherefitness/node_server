@@ -27,6 +27,29 @@ exports.up = (knex) => {
         .onDelete('CASCADE');
       table.timestamps(true, true);
     })
+    .createTable('class_cards', function (table) {
+      table.increments('id').primary();
+      table
+        .string('owner_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('profiles')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE');
+      table
+        .string('issued_by')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('profiles')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE');
+      table.string('type').notNullable();
+      table.integer('total_classes').notNullable();
+      table.decimal('price_paid', 10, 2);
+      table.timestamps(true, true);
+    })
     .createTable('reservations', function (table) {
       table.increments('id').primary();
       table
@@ -45,6 +68,14 @@ exports.up = (knex) => {
         .inTable('profiles')
         .onUpdate('CASCADE')
         .onDelete('CASCADE');
+      table
+        .integer('pass_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('class_cards')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE');
       table.timestamps(true, true);
     });
 };
@@ -52,6 +83,7 @@ exports.up = (knex) => {
 exports.down = (knex) => {
   return knex.schema
     .dropTableIfExists('reservations')
+    .dropTableIfExists('class_cards')
     .dropTableIfExists('classes')
     .dropTableIfExists('profiles');
 };

@@ -37,10 +37,17 @@ const validatePayload = async (req, res, next) => {
     }
   });
 
-  res.locals.payload = res.locals.user
-    ? { ...payload, owner_id: res.locals.user.id }
-    : payload;
-  next();
+  if (table === 'class_cards') {
+    res.locals.payload = res.locals.user
+      ? { ...payload, issued_by: res.locals.user.id }
+      : payload;
+    next();
+  } else {
+    res.locals.payload = res.locals.user
+      ? { ...payload, owner_id: res.locals.user.id }
+      : payload;
+    next();
+  }
 };
 
 module.exports = {
