@@ -33,7 +33,7 @@ const auth = async (req, res, next) => {
     // make sure that the profile from token still exists
     res.locals.user = decodeToken(authHeader);
     const verify = await DB.findById('profiles', res.locals.user.id);
-    if (verify.id != res.locals.user.id)
+    if (verify[0].id != res.locals.user.id)
       throw new Error('User token does not exist');
 
     // only instructors can create new classes
@@ -46,12 +46,12 @@ const auth = async (req, res, next) => {
     } else {
       const { table, id } = req.params;
       const resource = await DB.findById(table, id);
-      if (resource.owner_id != res.locals.user.id)
-        throw new Error('User must be resource owner');
+      if (resource[0].owner_id != res.locals.user.id)
+        throw new Error('User does not have permission to do this');
       next();
     }
   } catch (err) {
-    next(createError(401, err));
+    next(createError(401, err.message));
   }
 };
 

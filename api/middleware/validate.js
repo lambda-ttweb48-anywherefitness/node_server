@@ -10,8 +10,9 @@ const validateResource = async (req, res, next) => {
   } else {
     try {
       const resource = await DB.findById(table, id);
-      if (resource) {
-        req.resource = resource;
+
+      if (resource[0]) {
+        req.resource = resource[0];
         next();
       } else {
         res.status(404).json({

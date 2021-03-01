@@ -4,7 +4,7 @@ var DB = require('../../data/dbInterface');
 var { auth } = require('../middleware/auth');
 
 router.get('/reservations', auth, function (req, res) {
-  DB.findClassesByParticipant(res.locals.user.id)
+  DB.findClassesBy({ ['reservations.owner_id']: res.locals.user.id })
     .then((classes) => {
       res.status(200).json(classes);
     })
@@ -14,7 +14,7 @@ router.get('/reservations', auth, function (req, res) {
 });
 
 router.get('/classes', auth, function (req, res) {
-  DB.findBy('classes', { ['classes.owner_id']: res.locals.user.id })
+  DB.findClassesBy({ ['classes.owner_id']: res.locals.user.id })
     .then((objs) => {
       res.status(200).json(objs);
     })
