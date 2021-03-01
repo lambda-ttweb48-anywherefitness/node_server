@@ -7,7 +7,7 @@ const classes = [
     intensity: 'hard',
     location: 'somewhere',
     max_size: 15,
-    owner_id: '00ulthapbErVUwVJy4x6',
+    owner_id: '00ulthapbErVUwVJy1x1',
   },
   {
     name: 'Yoga 60 Beginners',
@@ -17,7 +17,7 @@ const classes = [
     intensity: 'easy',
     location: 'somewhere',
     max_size: 20,
-    owner_id: '00ulthapbErVUwVJy4x6',
+    owner_id: '00ulthapbErVUwVJy1x1',
   },
   {
     name: 'Yoga 60',
@@ -27,7 +27,7 @@ const classes = [
     intensity: 'medium',
     location: 'somewhere',
     max_size: 15,
-    owner_id: '00ulthapbErVUwVJy4x6',
+    owner_id: '00ulthapbErVUwVJy1x1',
   },
 ];
 

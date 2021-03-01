@@ -1,15 +1,29 @@
 const faker = require('faker');
 
-const profiles = [...new Array(5)].map((i, idx) => ({
-  id: idx === 0 ? '00ulthapbErVUwVJy4x6' : faker.random.alphaNumeric(20),
+const fakeProfiles = [...new Array(5)].map(() => ({
+  id: faker.random.alphaNumeric(20),
   password: faker.internet.password(),
-  email: idx === 0 ? 'llama001@maildrop.cc"' : faker.internet.email(),
-  name:
-    idx === 0
-      ? 'Test001 User'
-      : `${faker.name.firstName()} ${faker.name.lastName()}`,
-  instructor: idx === 0 ? true : false,
+  email: faker.internet.email(),
+  name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+  instructor: true,
 }));
+
+const profiles = [
+  {
+    id: '00ulthapbErVUwVJy1x1',
+    password: 'instructor_pass',
+    email: 'instructor@fake.com',
+    name: 'Fanny Fitness',
+    instructor: true,
+  },
+  {
+    id: '22ulthapbErVUwVJy9x9',
+    password: 'client_pass',
+    email: 'client@fake.com',
+    name: 'Frank Fatness',
+    instructor: false,
+  },
+];
 
 exports.seed = function (knex) {
   // Deletes ALL existing entries
@@ -17,6 +31,6 @@ exports.seed = function (knex) {
     .del()
     .then(function () {
       // Inserts seed entries
-      return knex('profiles').insert(profiles);
+      return knex('profiles').insert(profiles.concat(fakeProfiles));
     });
 };

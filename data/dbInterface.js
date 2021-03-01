@@ -23,7 +23,11 @@ const schema = {
   },
   class_passes: {
     friendlyName: 'Class Pass',
-    requiredFields: ['owner_id', 'type', 'total_classes', 'price_paid'],
+    requiredFields: ['total_classes', 'price'],
+  },
+  client_passes: {
+    friendlyName: 'Client Pass',
+    requiredFields: ['class_pass_id'],
   },
 };
 
@@ -43,23 +47,6 @@ const findReservationsById = async (id) => {
 	  PROFILES.NAME`);
 };
 
-const findReservationsBy = async (filter) => {
-  return await db('reservations')
-    .leftJoin('classes', 'reservations.class_id', 'classes.id')
-    .leftJoin({ rcount: 'reservations' }, 'classes.id', 'rcount.class_id')
-    .leftJoin('profiles', 'classes.owner_id', 'profiles.id')
-    .select(
-      db.raw(
-        `reservations.id as reservation_id,
-        classes.*,
-        (classes.max_size - count(rcount.id)::int) as spots_remaining, 
-        profiles.name as instructor`
-      )
-    )
-    .where(filter)
-    .groupBy('reservations.id', 'classes.id', 'profiles.name');
-};
-
 const findClassesBy = async (filter) => {
   return await db('classes')
     .leftJoin('reservations', { 'classes.id': 'reservations.class_id' })
@@ -75,35 +62,71 @@ const findClassesBy = async (filter) => {
     .where(filter);
 };
 
-const findPassesBy = async (filter) => {
+const findClassPassesBy = async (filter) => {
   return await db('class_passes')
     .leftJoin('reservations', { 'class_passes.id': 'reservations.pass_id' })
     .select(
       db.raw(
         `class_passes.*, 
-        (count(reservations.id)::int) as classes_used`
+        (count(reservations.id)::int) as num_of_clients`
       )
     )
     .groupBy('class_passes.id')
     .where(filter);
 };
 
+const findClientPassesBy = async (filter) => {
+  return await db('client_passes')
+    .leftJoin('reservations', { 'client_passes.id': 'reservations.pass_id' })
+    .leftJoin('profiles', { 'client_passes.instructor_id': 'profiles.id' })
+    .select(
+      db.raw(
+        `client_passes.*, 
+        profiles.name as instructor,
+        (count(reservations.id)::int) as classes_used`
+      )
+    )
+    .groupBy('client_passes.id', 'profiles.id')
+    .where(filter);
+};
+
 const findAll = async (table) => {
-  if (table === 'classes') {
-    return findClassesBy({});
-  } else return await db(table);
+  switch (table) {
+    case 'classes':
+      return findClassesBy({});
+    case 'class_passes':
+      return findClassPassesBy({});
+    case 'client_passes':
+      return findClientPassesBy({});
+    default:
+      return await db(table);
+  }
 };
 
 const findBy = async (table, filter) => {
-  if (table === 'classes') {
-    return findClassesBy(filter);
-  } else return db(table).where(filter);
+  switch (table) {
+    case 'classes':
+      return findClassesBy(filter);
+    case 'class_passes':
+      return findClassPassesBy(filter);
+    case 'client_passes':
+      return findClientPassesBy(filter);
+    default:
+      return await db(table).where(filter);
+  }
 };
 
 const findById = async (table, id) => {
-  if (table === 'classes') {
-    return findClassesBy({ ['classes.id']: id });
-  } else return db(table).where({ id }).select('*');
+  switch (table) {
+    case 'classes':
+      return findClassesBy({ ['classes.id']: id });
+    case 'class_passes':
+      return findClassPassesBy({ ['class_passes.id']: id });
+    case 'client_passes':
+      return findClientPassesBy({ ['client_passes.id']: id });
+    default:
+      return await db(table).where({ id });
+  }
 };
 
 const create = async (table, newObj) => {
@@ -127,7 +150,7 @@ module.exports = {
   update,
   remove,
   findReservationsById,
-  findReservationsBy,
   findClassesBy,
-  findPassesBy,
+  findClassPassesBy,
+  findClientPassesBy,
 };

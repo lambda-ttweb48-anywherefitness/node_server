@@ -18,14 +18,23 @@ Path|Method|Requirements|Auth
 /api/classes/:id| DELETE | none | Auth token profile id must match class owner id
 /dash/classes|GET|none|valid auth token, will return all classes taught by token profile
 
-### Class Cards
+### Class Passes
 Path|Method|Requirements|Auth
 ---|-----|-------------|-----
 /api/class_passes| GET | none | none
-/api/class_passes|POST| owner_id (client), type, total_classes, price_paid | valid JWT token w instructor = true
-/api/class_passes/:id| PUT | id, any edits | Auth token profile id must match reservation owner id?
+/api/class_passes|POST| total_classes, price (decimal) | valid JWT token w instructor = true
+/api/class_passes/:id| PUT | id, any edits | Auth token profile id must match class_pass owner id
 /api/class_passes/:id| DELETE | none | Auth token profile id must match reservation owner id
-/dash/passes|GET|none|Auth token (will return all class passes for the token profile id)
+/dash/class_passes|GET|none|Auth token (will return all class passes for the token profile id)
+
+### Client Passes
+Path|Method|Requirements|Auth
+---|-----|-------------|-----
+/api/client_passes| GET | none | none
+/api/client_passes/:id| GET | none | none
+/api/client_passes|POST| class_pass_id | valid JWT token 
+/api/client_passes/:id| DELETE | none | Auth token profile id must match reservation owner id
+/dash/client_passes|GET|none|Auth token (will return all client passes for the token profile id)
 
 ### Reservations
 Path|Method|Requirements|Auth

@@ -1,10 +1,13 @@
 const passes = [
   {
-    owner_id: '00ulthapbErVUwVJy4x6',
-    type: 'YOGA',
-    issued_by: '00ulthapbErVUwVJy4x6',
+    owner_id: '00ulthapbErVUwVJy1x1',
     total_classes: 10,
-    price_paid: 120.99,
+    price: 99.99,
+  },
+  {
+    owner_id: '00ulthapbErVUwVJy1x1',
+    total_classes: 5,
+    price: 69.99,
   },
 ];
 

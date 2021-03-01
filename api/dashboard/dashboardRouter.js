@@ -23,8 +23,8 @@ router.get('/classes', auth, function (req, res) {
     });
 });
 
-router.get('/passes', auth, function (req, res) {
-  DB.findPassesBy({ ['class_passes.owner_id']: res.locals.user.id })
+router.get('/class_passes', auth, function (req, res) {
+  DB.findClassPassesBy({ ['class_passes.owner_id']: res.locals.user.id })
     .then((objs) => {
       res.status(200).json(objs);
     })
@@ -32,5 +32,16 @@ router.get('/passes', auth, function (req, res) {
       res.status(500).json({ message: err.message });
     });
 });
+
+router.get('/client_passes', auth, function (req, res) {
+  DB.findClientPassesBy({ ['client_passes.owner_id']: res.locals.user.id })
+    .then((objs) => {
+      res.status(200).json(objs);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+});
+
 
 module.exports = router;

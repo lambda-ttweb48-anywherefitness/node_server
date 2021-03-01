@@ -27,6 +27,21 @@ const validateResource = async (req, res, next) => {
   }
 };
 
+const createClientPassPayload = async (pass_id) => {
+  let payload;
+  try {
+    const cp = await DB.findById('class_passes', pass_id);
+    payload = {
+      instructor_id: cp[0].owner_id,
+      total_classes: cp[0].total_classes,
+      price_paid: cp[0].price,
+    };
+    return payload;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const validatePayload = async (req, res, next) => {
   const table = req.params.table ? req.params.table : 'profiles';
   const payload = req.body;
@@ -37,17 +52,16 @@ const validatePayload = async (req, res, next) => {
     }
   });
 
-  if (table === 'class_passes') {
-    res.locals.payload = res.locals.user
-      ? { ...payload, issued_by: res.locals.user.id }
+  res.locals.payload =
+    table === 'client_passes'
+      ? await createClientPassPayload(payload.class_pass_id)
       : payload;
-    next();
-  } else {
-    res.locals.payload = res.locals.user
-      ? { ...payload, owner_id: res.locals.user.id }
-      : payload;
-    next();
-  }
+
+  res.locals.payload = res.locals.user
+    ? { ...res.locals.payload, owner_id: res.locals.user.id }
+    : payload;
+
+  next();
 };
 
 module.exports = {
