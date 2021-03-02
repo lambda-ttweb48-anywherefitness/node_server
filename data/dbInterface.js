@@ -78,14 +78,14 @@ const findClassesBy = async (filter) => {
 
 const findClassPassesBy = async (filter) => {
   return await db('class_passes')
-    .leftJoin('reservations', { 'class_passes.id': 'reservations.pass_id' })
+    .leftJoin('profiles', { 'class_passes.owner_id': 'profiles.id' })
     .select(
       db.raw(
         `class_passes.*, 
-        (count(reservations.id)::int) as num_of_clients`
+        profiles.name as instructor`
       )
     )
-    .groupBy('class_passes.id')
+    .groupBy('class_passes.id', 'profiles.id')
     .where(filter);
 };
 
@@ -97,6 +97,7 @@ const findClientPassesBy = async (filter) => {
       db.raw(
         `client_passes.*, 
         profiles.name as instructor,
+        profiles.id as instructor_id,
         (count(reservations.id)::int) as classes_used`
       )
     )
