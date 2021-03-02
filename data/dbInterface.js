@@ -52,10 +52,12 @@ const findReservationsBy = async (filter) => {
     .leftJoin('profiles', { 'classes.owner_id': 'profiles.id' })
     .select(
       db.raw(
-        `RESERVATIONS.ID AS RESERVATION_ID,
+        `reservations.*,
         CLASSES.*,
-        (CLASSES.MAX_SIZE - COUNT(RCOUNT.ID)::int) AS SPOTS_REMAINING,
-        PROFILES.NAME AS INSTRUCTOR`
+        CLASSES.id as CLASS_ID,
+        CLASSES.OWNER_ID as INSTRUCTOR_ID,
+        PROFILES.NAME AS INSTRUCTOR,
+        (CLASSES.MAX_SIZE - COUNT(RCOUNT.ID)::int) AS SPOTS_REMAINING`
       )
     )
     .groupBy('reservations.id', 'classes.id', 'profiles.id')
