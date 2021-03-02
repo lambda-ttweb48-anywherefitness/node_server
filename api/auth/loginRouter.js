@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
         const { password, ...userResp } = profiles[0];
         const token = Auth.makeToken(profiles[0]);
         res.status(200).json({
-          user: userResp,
+          [DB.schema['profiles'].friendlyName]: userResp,
           token: token,
         });
       } else

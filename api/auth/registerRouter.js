@@ -20,7 +20,10 @@ router.post('/', validatePayload, async (req, res) => {
             const token = Auth.makeToken(profile[0]);
             //eslint-disable-next-line
             const { password, ...profResp } = profile[0];
-            res.status(201).json({ profile: profResp, token: token });
+            res.status(201).json({
+              [DB.schema['profiles'].friendlyName]: profResp,
+              token: token,
+            });
           })
           .catch((error) => {
             res.status(500).json({
