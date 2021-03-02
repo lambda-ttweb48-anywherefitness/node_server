@@ -3,10 +3,21 @@ const db = require('./db-config');
 const schema = {
   profiles: {
     friendlyName: 'Profile',
+    searchFields: ['id', 'name'],
     requiredFields: ['email', 'name', 'password'],
   },
   classes: {
     friendlyName: 'Class',
+    searchFields: [
+      'id',
+      'type',
+      'name',
+      'start',
+      'duration',
+      'intensity',
+      'location',
+      'max_size',
+    ],
     requiredFields: [
       'type',
       'name',
@@ -19,14 +30,17 @@ const schema = {
   },
   reservations: {
     friendlyName: 'Reservation',
+    searchFields: ['class_id', 'pass_id', 'owner_id'],
     requiredFields: ['class_id', 'pass_id'],
   },
   class_passes: {
     friendlyName: 'Class Pass',
+    searchFields: ['owner_id', 'price', 'total_classes'],
     requiredFields: ['total_classes', 'price'],
   },
   client_passes: {
     friendlyName: 'Client Pass',
+    searchFields: ['owner_id', 'instructor_id'],
     requiredFields: ['class_pass_id'],
   },
 };

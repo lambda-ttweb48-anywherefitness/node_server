@@ -2,10 +2,14 @@ var express = require('express');
 var router = express.Router();
 var DB = require('../data/dbInterface');
 var { auth } = require('./middleware/auth');
-var { validateResource, validatePayload } = require('./middleware/validate');
+var {
+  validateResource,
+  validatePayload,
+  validateQuery,
+} = require('./middleware/validate');
 
-router.get('/:table/', validateResource, function (req, res) {
-  DB.findAll(req.params.table)
+router.get('/:table/', validateResource, validateQuery, function (req, res) {
+  DB.findBy(req.params.table, res.locals.query)
     .then((objs) => {
       res.status(200).json(objs);
     })
