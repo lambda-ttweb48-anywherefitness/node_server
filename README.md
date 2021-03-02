@@ -13,7 +13,8 @@ Path|Method|Requirements|Auth
 ### Classes
 Path|Method|Requirements|Auth
 ---|-----|-------------|-----
-/api/classes| GET | optional query strings to filter search | none
+/api/classes| GET | optional query parameters to filter search: all required fields and owner_id | none
+/api/classes/:id| GET | none | none
 /api/classes|POST| name, type, start (Datetime), duration (int minutes), intensity, location, max_size (int)|valid JWT token w intstructor = true 
 /api/classes/:id| PUT | id, any edits | Auth token profile id must match class owner id
 /api/classes/:id| DELETE | none | Auth token profile id must match class owner id
@@ -22,7 +23,8 @@ Path|Method|Requirements|Auth
 ### Class Passes
 Path|Method|Requirements|Auth
 ---|-----|-------------|-----
-/api/class_passes| GET | none | none
+/api/class_passes| GET | optional query parameters to filter search: ['owner_id', 'price', 'total_classes'] | none
+/api/class_passes/:id| GET | none | none
 /api/class_passes|POST| total_classes, price (decimal) | valid JWT token w instructor = true
 /api/class_passes/:id| PUT | id, any edits | Auth token profile id must match class_pass owner id
 /api/class_passes/:id| DELETE | none | Auth token profile id must match reservation owner id
@@ -31,7 +33,7 @@ Path|Method|Requirements|Auth
 ### Client Passes
 Path|Method|Requirements|Auth
 ---|-----|-------------|-----
-/api/client_passes| GET | none | none
+/api/client_passes| GET | optional query parameters to filter search: ['owner_id', 'instructor_id']| none
 /api/client_passes/:id| GET | none | none
 /api/client_passes|POST| class_pass_id | valid JWT token 
 /api/client_passes/:id| DELETE | none | Auth token profile id must match client pass owner id
@@ -40,7 +42,8 @@ Path|Method|Requirements|Auth
 ### Reservations
 Path|Method|Requirements|Auth
 ---|-----|-------------|-----
-/api/reservations| GET | none | none
+/api/reservations| GET | optional query parameters to filter search: ['class_id', 'pass_id', 'owner_id'] | none
+/api/reservations/:id| GET | none | nones
 /api/reservations|POST| class_id, class_pass_id |valid JWT token 
 /api/reservations:id| PUT | id, any edits | Auth token profile id must match reservation owner id
 /api/reservations/:id| DELETE | none | Auth token profile id must match reservation owner id

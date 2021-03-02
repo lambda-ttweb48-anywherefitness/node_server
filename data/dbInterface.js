@@ -9,7 +9,7 @@ const schema = {
   classes: {
     friendlyName: 'Class',
     searchFields: [
-      'id',
+      'owner_id',
       'type',
       'name',
       'start',
