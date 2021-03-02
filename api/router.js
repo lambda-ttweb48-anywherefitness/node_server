@@ -14,7 +14,10 @@ router.get('/:table/', validateResource, validateQuery, function (req, res) {
       res.status(200).json(objs);
     })
     .catch((err) => {
-      res.status(500).json({ message: err.message });
+      res.status(500).json({
+        message: `Could not find ${DB.schema[req.params.table].friendlyName}s`,
+        error: err.message,
+      });
     });
 });
 
@@ -36,7 +39,12 @@ router.post(
           [DB.schema[table].friendlyName]: obj[0],
         })
       )
-      .catch((e) => res.status(500).json({ message: e.message }));
+      .catch((err) =>
+        res.status(500).json({
+          message: `Could not create ${DB.schema[table].friendlyName}.`,
+          error: err.message,
+        })
+      );
   }
 );
 
@@ -51,8 +59,8 @@ router.put('/:table/:id', validateResource, auth, (req, res) => {
     })
     .catch((err) => {
       res.status(500).json({
-        error: `Could not update ${DB.schema[table].friendlyName} '${id}'`,
-        details: err.message,
+        message: `Could not update ${DB.schema[table].friendlyName} '${id}'`,
+        error: err.message,
       });
     });
 });
@@ -62,7 +70,7 @@ router.delete('/:table/:id', validateResource, auth, (req, res) => {
   DB.remove(table, id)
     .then(() => {
       res.status(200).json({
-        message: `${DB.schema[table].friendlyName} '${id}' was deleted.`,
+        message: `${DB.schema[table].friendlyName} '${id}' deleted.`,
       });
     })
     .catch((err) => {
