@@ -33,7 +33,7 @@ const validateResource = async (req, res, next) => {
 const createClientPassPayload = async (pass_id) => {
   let payload;
   try {
-    const cp = await DB.findById('class_passes', pass_id);
+    const cp = await DB.findBy('class_passes', { 'class_passes.id': pass_id });
     payload = {
       instructor_id: cp[0].owner_id,
       total_classes: cp[0].total_classes,

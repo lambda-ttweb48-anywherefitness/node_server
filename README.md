@@ -13,7 +13,7 @@ Path|Method|Requirements|Auth
 ### Classes
 Path|Method|Requirements|Auth
 ---|-----|-------------|-----
-/api/classes| GET | optional query parameters to filter search: all required fields and owner_id | none
+/api/classes| GET | optional query parameters to filter search: all required fields and owner_id. Use start=all to fetch all classes, otherwise will only show upcoming classes| none
 /api/classes/:id| GET | none | none
 /api/classes|POST| name, type, start (Datetime), duration (int minutes), intensity, location, max_size (int)|valid JWT token w intstructor = true 
 /api/classes/:id| PUT | id, any edits | Auth token profile id must match class owner id
@@ -42,7 +42,7 @@ Path|Method|Requirements|Auth
 ### Reservations
 Path|Method|Requirements|Auth
 ---|-----|-------------|-----
-/api/reservations| GET | optional query parameters to filter search: ['class_id', 'pass_id', 'owner_id'] | none
+/api/reservations| GET | optional query parameters to filter search: ['class_id', 'pass_id', 'owner_id','start']. Start is based on class start, use start=all to fetch all reservations, otherwise will only show upcoming reservations | none
 /api/reservations/:id| GET | none | nones
 /api/reservations|POST| class_id, class_pass_id |valid JWT token 
 /api/reservations:id| PUT | id, any edits | Auth token profile id must match reservation owner id

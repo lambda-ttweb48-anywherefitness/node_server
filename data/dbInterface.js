@@ -30,7 +30,7 @@ const schema = {
   },
   reservations: {
     friendlyName: 'Reservation',
-    searchFields: ['class_id', 'pass_id', 'owner_id'],
+    searchFields: ['class_id', 'pass_id', 'owner_id', 'start'],
     requiredFields: ['class_id', 'pass_id'],
   },
   class_passes: {
@@ -61,7 +61,20 @@ const findReservationsBy = async (filter) => {
       )
     )
     .groupBy('reservations.id', 'classes.id', 'profiles.id')
-    .where(filter);
+    .where((builder) => {
+      const { 'reservations.start': start, ...newFilter } = filter;
+      if (start === 'all') {
+        builder.where(newFilter);
+      } else if (start) {
+        builder
+          .where(newFilter)
+          .andWhereRaw(`classes.start::date = ?`, [start]);
+      } else {
+        builder
+          .where(newFilter)
+          .andWhere('classes.start', '>=', new Date().toISOString());
+      }
+    });
 };
 
 const findClassesBy = async (filter) => {
@@ -76,7 +89,20 @@ const findClassesBy = async (filter) => {
       )
     )
     .groupBy('classes.id', 'profiles.id')
-    .where(filter);
+    .where((builder) => {
+      const { 'classes.start': start, ...newFilter } = filter;
+      if (start === 'all') {
+        builder.where(newFilter);
+      } else if (start) {
+        builder
+          .where(newFilter)
+          .andWhereRaw(`classes.start::date = ?`, [start]);
+      } else {
+        builder
+          .where(newFilter)
+          .andWhere('classes.start', '>=', new Date().toISOString());
+      }
+    });
 };
 
 const findClassPassesBy = async (filter) => {

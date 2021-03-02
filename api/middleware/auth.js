@@ -37,7 +37,7 @@ const reqHasToken = async (req, res, next) => {
 const tokenHasValidProfile = async (req, res, next) => {
   try {
     res.locals.user = decodeToken(req.headers.authorization);
-    const verify = await DB.findById('profiles', res.locals.user.id);
+    const verify = await DB.findBy('profiles', { id: res.locals.user.id });
     if (verify[0].id != res.locals.user.id)
       throw new Error('User profile does not exist');
     next();
@@ -65,7 +65,7 @@ const profileCanEditObject = async (req, res, next) => {
       next();
     } else {
       const { table, id } = req.params;
-      const resource = await DB.findById(table, id);
+      const resource = await DB.findBy(table, { [`${table}.id`]: id });
       if (resource[0].owner_id != res.locals.user.id)
         throw new Error('User does not have permission to do this');
       next();
