@@ -12,7 +12,7 @@ const validateResource = async (req, res, next) => {
   } else {
     // else look for that object and pass it through in locals
     try {
-      const resource = await DB.findById(table, id);
+      const resource = await DB.findBy(table, { [`${table}.id`]: id });
 
       if (resource[0]) {
         req.resource = resource[0];
@@ -73,16 +73,14 @@ const validatePayload = async (req, res, next) => {
 
 const validateQuery = async (req, res, next) => {
   const paramKeys = Object.keys(req.query);
-  const { owner_id, ...query } = req.query;
 
   // if no keys set filter to blank object and move on
   if (paramKeys.length === 0) {
     res.locals.query = {};
     next();
   } else {
+    // test all keys against valid search fields and push to errors if any
     var errors = [];
-
-    // test all keys against valid fields and push to errors if any
     for (var i = 0; i < paramKeys.length; i++) {
       var key = paramKeys[i];
       if (DB.schema[req.params.table].searchFields.indexOf(key) == -1) {
@@ -90,20 +88,20 @@ const validateQuery = async (req, res, next) => {
       }
     }
 
+    // return errors if there are any
     if (errors.length > 0) {
       res.status(400).json({
         message: 'Please provide valid query params',
         invalidFields: errors,
       });
-    } else if (owner_id) {
-      // re-add owner_id with correct table name and set to res.locals
-      res.locals.query = {
-        ...query,
-        [`${req.params.table}.owner_id`]: owner_id,
-      };
-      next();
     } else {
-      res.locals.query = req.query;
+      // add table names to keys and return res locals
+      paramKeys.forEach((key) => {
+        res.locals.query = {
+          ...res.locals.query,
+          [`${req.params.table}.${key}`]: req.query[key],
+        };
+      });
       next();
     }
   }
