@@ -12,7 +12,13 @@ const validateResource = async (req, res, next) => {
   } else {
     // else look for that object and pass it through in locals
     try {
-      const resource = await DB.findBy(table, { [`${table}.id`]: id });
+      const filter =
+        // eslint-disable-next-line no-constant-condition
+        table === 'classes' || 'reservations'
+          ? { [`${table}.id`]: id, [`${table}.start`]: 'all' }
+          : { [`${table}.id`]: id };
+
+      const resource = await DB.findBy(table, filter);
 
       if (resource[0]) {
         req.resource = resource[0];
