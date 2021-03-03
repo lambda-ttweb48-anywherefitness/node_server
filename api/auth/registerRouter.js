@@ -27,18 +27,18 @@ router.post('/', validatePayload, async (req, res) => {
           })
           .catch((error) => {
             res.status(500).json({
-              error: 'Could not add new user',
-              message: error.message,
+              message: 'Could not add new user',
+              error: error.message,
             });
           });
       } else {
-        res
-          .status(401)
-          .json({ error: 'An account with this email address already exists' });
+        res.status(401).json({
+          message: 'An account with this email address already exists',
+        });
       }
     })
     .catch((error) => {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ message: error.message });
     });
 });
 
