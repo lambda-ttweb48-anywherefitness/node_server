@@ -45,38 +45,6 @@ const schema = {
   },
 };
 
-// const findReservationsBy = async (filter) => {
-//   return await db('reservations')
-//     .leftJoin('classes', { 'reservations.class_id': 'classes.id' })
-//     .leftJoin('reservations as rcount', { 'reservations.id': 'rcount.id' })
-//     .leftJoin('profiles', { 'classes.owner_id': 'profiles.id' })
-//     .select(
-//       db.raw(
-//         `reservations.*,
-//         CLASSES.*,
-//         CLASSES.id as CLASS_ID,
-//         CLASSES.OWNER_ID as INSTRUCTOR_ID,
-//         PROFILES.NAME AS INSTRUCTOR,
-//         (CLASSES.MAX_SIZE - COUNT(RCOUNT.ID)::int) AS SPOTS_REMAINING`
-//       )
-//     )
-//     .groupBy('reservations.id', 'classes.id', 'profiles.id')
-//     .where((builder) => {
-//       const { 'reservations.start': start, ...newFilter } = filter;
-//       if (start === 'all') {
-//         builder.where(newFilter);
-//       } else if (start) {
-//         builder
-//           .where(newFilter)
-//           .andWhereRaw(`classes.start::date = ?`, [start]);
-//       } else {
-//         builder
-//           .where(newFilter)
-//           .andWhere('classes.start', '>=', new Date().toISOString());
-//       }
-//     });
-// };
-
 const findReservationsBy = async (filter) => {
   return await db('reservations')
     .leftJoin('classes', { 'reservations.class_id': 'classes.id' })
