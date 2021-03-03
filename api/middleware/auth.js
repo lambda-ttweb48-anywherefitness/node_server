@@ -65,7 +65,15 @@ const profileCanEditObject = async (req, res, next) => {
       next();
     } else {
       const { table, id } = req.params;
-      const resource = await DB.findBy(table, { [`${table}.id`]: id });
+      const filter =
+        // eslint-disable-next-line no-constant-condition
+        table === 'classes' || 'reservations'
+          ? { [`${table}.id`]: id, [`${table}.start`]: 'all' }
+          : { [`${table}.id`]: id };
+
+      const resource = await DB.findBy(table, filter);
+      console.log(resource);
+
       if (resource[0].owner_id != res.locals.user.id)
         throw new Error('User does not have permission to do this');
       next();
