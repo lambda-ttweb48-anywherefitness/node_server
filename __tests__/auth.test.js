@@ -28,10 +28,11 @@ describe('auth router endpoints', () => {
         name: 'Louie Smith',
         email: 'louie@example.com',
         password: 'foobar',
+        instructor: true,
       };
       const res = await request(server).post('/register').send(profile);
       expect(res.status).toBe(201);
-      expect(res.body.profile.name).toBe('Louie Smith');
+      expect(res.body.Profile.name).toBe('Louie Smith');
     });
   });
 
@@ -43,7 +44,7 @@ describe('auth router endpoints', () => {
       };
       const res = await request(server).post(`/login`).send(login);
       expect(res.status).toBe(200);
-      expect(res.body.user.email).toBe(login.email);
+      expect(res.body.Profile.email).toBe(login.email);
       expect(res.body.token).toBeDefined();
     });
   });

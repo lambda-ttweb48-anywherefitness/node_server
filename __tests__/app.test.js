@@ -2,7 +2,7 @@ const request = require('supertest');
 const server = require('../api/app.js');
 
 it('correct env', () => {
-  expect(process.env.DB_ENV).toBe('testing');
+  expect(process.env.NODE_ENV).toBe('testing');
 });
 
 describe('index router endpoints', () => {

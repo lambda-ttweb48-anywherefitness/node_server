@@ -12,7 +12,7 @@ const classes = [
   {
     name: 'Yoga 60 Beginners',
     type: 'yoga',
-    start: new Date(2021, 2, 1, 8, 0, 0, 0),
+    start: new Date(2021, 2, 8, 8, 0, 0, 0),
     duration: 60,
     intensity: 'easy',
     location: 'somewhere',
@@ -20,9 +20,9 @@ const classes = [
     owner_id: '00ulthapbErVUwVJy1x1',
   },
   {
-    name: 'Yoga 60',
-    type: 'yoga',
-    start: new Date(2021, 2, 1, 10, 0, 0, 0),
+    name: 'Pilates 60',
+    type: 'Pilates',
+    start: new Date(2021, 2, 15, 10, 0, 0, 0),
     duration: 60,
     intensity: 'medium',
     location: 'somewhere',
