@@ -53,6 +53,7 @@ const findReservationsBy = async (filter) => {
     .select(
       db.raw(
         `reservations.id as reservation_id,
+        reservations.pass_id as client_pass_id,
         reservations.owner_id as client_id,
         CLASSES.id as CLASS_ID,
         classes.name as class_name,
