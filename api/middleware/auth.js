@@ -3,6 +3,7 @@ const createError = require('http-errors');
 const DB = require('../../data/dbInterface');
 require('dotenv').config();
 
+// JWOT TOKEN HELPERS
 const makeToken = (profile) => {
   const payload = {
     id: profile.id,
@@ -24,6 +25,9 @@ const decodeToken = (token) => {
   return jwt.decode(token, jwtSecret);
 };
 
+// AUTH MIDDLEWARE COMPONENTS
+
+// ensure requests have a token
 const reqHasToken = async (req, res, next) => {
   try {
     if (!req.headers.authorization)
@@ -34,6 +38,7 @@ const reqHasToken = async (req, res, next) => {
   }
 };
 
+// ensure token references valid user profile
 const tokenHasValidProfile = async (req, res, next) => {
   try {
     res.locals.user = decodeToken(req.headers.authorization);
@@ -46,6 +51,7 @@ const tokenHasValidProfile = async (req, res, next) => {
   }
 };
 
+// Restrict class and class_pass creation to registered instructors
 const profileCanCreateObject = async (req, res, next) => {
   try {
     if (
@@ -59,21 +65,14 @@ const profileCanCreateObject = async (req, res, next) => {
   }
 };
 
+// Restrict put/delete actions to objects where user (via token) is the owner of the object.
 const profileCanEditObject = async (req, res, next) => {
   try {
     if (!req.params.id) {
+      // can ignore for all routes that don't reference a specific item
       next();
     } else {
-      const { table, id } = req.params;
-      const filter =
-        // eslint-disable-next-line no-constant-condition
-        table === 'classes' || 'reservations'
-          ? { [`${table}.id`]: id, [`${table}.start`]: 'all' }
-          : { [`${table}.id`]: id };
-
-      const resource = await DB.findBy(table, filter);
-      console.log(resource);
-
+      const resource = await DB.findById(req.params.table, req.params.id);
       if (resource[0].owner_id != res.locals.user.id)
         throw new Error('User does not have permission to do this');
       next();
