@@ -53,7 +53,7 @@ describe('classes router endpoints', () => {
       expect(res.body.name).toBe('Yoga 60 Beginners');
     });
 
-    it('should return 404 when no user found', async () => {
+    it('should return 404 when no class found', async () => {
       const id = '43';
       const res = await request(server).get(`/api/classes/${id}`);
       expect(res.status).toBe(404);

@@ -142,6 +142,10 @@ const findClientPassesBy = async (filter) => {
     .where(filter);
 };
 
+const findById = async (table, id) => {
+  return await db(table).where({ id });
+};
+
 const findBy = async (table, filter) => {
   switch (table) {
     case 'classes':
@@ -172,6 +176,7 @@ const remove = async (table, id) => {
 module.exports = {
   schema,
   findBy,
+  findById,
   create,
   update,
   remove,

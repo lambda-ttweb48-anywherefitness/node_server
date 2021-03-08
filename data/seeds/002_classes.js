@@ -12,7 +12,7 @@ const classes = [
   {
     name: 'Yoga 60 Beginners',
     type: 'yoga',
-    start: new Date(2021, 2, 8, 8, 0, 0, 0),
+    start: new Date(2021, 2, 21, 8, 0, 0, 0),
     duration: 60,
     intensity: 'easy',
     location: 'somewhere',
